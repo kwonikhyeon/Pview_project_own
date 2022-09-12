@@ -274,7 +274,7 @@ def cropImage(data_dir=None, imgName=None, area='all', outputType = 0, inputImg 
 
         #cv2.imwrite(os.path.join('./crop dataset', 'mask_'+area +'_'+ imgName), masked_cut_img)
         #cv2.imwrite(os.path.join('./crop dataset', area +'_'+ imgName), cut_img)
-        cv2.imwrite(os.path.join('./crop dataset', area +'_'+ imgName), warp_img)
+        cv2.imwrite(os.path.join('./part dataset', area +'_'+ imgName), warp_img)
         return
         
     elif outputType == 2:
@@ -287,17 +287,18 @@ if __name__=="__main__":
     imgName1 = 'kyo_face1.jpg'
     imgName2 = 'N_221.png'
     
-    # parts = ['right_cheek','left_cheek','right_eye','left_eye','forehead','nose']
+    parts = ['right_cheek','left_cheek','right_eye','left_eye','forehead']
 
-    # for (root, directories, files) in os.walk(data_dir1):
-    #     for file in files:
-    #         cropImage(root, file, 'forehead', 1)
+    for (root, directories, files) in os.walk(data_dir1):
+        for file in files:
+            for part in parts:
+                cropImage(root, file, part, 1)
             
     
 
 
     # create_landmark_img(data_dir1, imgName2, 1)
-    cropImage(data_dir2, 'black.jpg', 'all', 1)
+    # cropImage(data_dir2, 'black.jpg', 'all', 1)
     
     # for part in parts:
     #     cropImage(data_dir, imgName, part, 1)
