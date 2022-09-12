@@ -28,6 +28,14 @@ from skimage.morphology import square
 from skimage.filters import frangi, gabor
 from skimage import measure, morphology
 
+def display_image(image, name):
+    window_name = name
+    cv2.namedWindow(window_name)
+    cv2.imshow(window_name, image)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
+
+
 
 def wrinkleDetect(data_dir, imgName):
     img = cv2.imread(os.path.join(data_dir, imgName))
@@ -260,23 +268,50 @@ def master_control(image):
     # image = cv2.resize(image, (int(image.shape[1]*0.3), int(image.shape[0]*0.3)), interpolation=cv2.INTER_CUBIC)  
     b, g, r = cv2.split(image)  # image
 
-    sk_frangi_img = frangi(g, scale_range=(0, 1), scale_step=0.01, alpha=1.5, beta=0.01)  
-    sk_frangi_img = morphology.closing(sk_frangi_img, morphology.disk(1))
-    sk_gabor_img_1, sk_gabor_1 = gabor(g, frequency=0.35, theta=0)
-    sk_gabor_img_2, sk_gabor_2 = gabor(g, frequency=0.35, theta=45) 
-    sk_gabor_img_3, sk_gabor_3 = gabor(g, frequency=0.35, theta=90)
-    sk_gabor_img_4, sk_gabor_4 = gabor(g, frequency=0.35, theta=360)  
+    c2 = b - 50 #히스토그램 앞으로 평행이동(너무 큰 값 살릴려고)
+    alpha = 1.5 #스트레칭 비율
+    c2 = np.clip((1+alpha)*c2 - 128*alpha, 0, 255).astype(np.uint8) #히스토그램 스트레칭(명암비 늘리기)
+
+    canny1 = cv2.Canny(c2, 100,30)
+    canny2 = cv2.Canny(b, 10,500)
+    display_image(c2, 'c2')
+    display_image(canny1, 'canny')
+    display_image(canny2, 'canny2')
+
+    sk_frangi_img = canny1
+    # frangi(g, scale_range=(1, 1.5), scale_step=0.1) #alpha=1.5, beta=0.01  
+    
+    # sk_frangi_img = morphology.closing(sk_frangi_img, morphology.disk(1))
+    # display_image(sk_frangi_img, "sk_frangi_img")
+    sk_gabor_img_1, sk_gabor_1 = gabor(g, frequency=0.25, theta=0)
+    
+    sk_gabor_img_2, sk_gabor_2 = gabor(g, frequency=0.25, theta=45) 
+    
+    sk_gabor_img_3, sk_gabor_3 = gabor(g, frequency=0.25, theta=90)
+    
+    sk_gabor_img_4, sk_gabor_4 = gabor(g, frequency=0.25, theta=360)  
+    
     sk_gabor_img_1 = morphology.opening(sk_gabor_img_1, morphology.disk(2))
     sk_gabor_img_2 = morphology.opening(sk_gabor_img_2, morphology.disk(1))
     sk_gabor_img_3 = morphology.opening(sk_gabor_img_3, morphology.disk(2))
     sk_gabor_img_4 = morphology.opening(sk_gabor_img_4, morphology.disk(2))
-    all_img = cv2.add(0.1 * sk_gabor_img_2, 0.9 * sk_frangi_img)  # + 0.02 * sk_gabor_img_1 + 0.02 * sk_gabor_img_2 + 0.02 * sk_gabor_img_3
+    all_img = cv2.add(0.02 * sk_gabor_img_1 + 0.12 * sk_gabor_img_2 + 0.12 * sk_gabor_img_3 + 0.04 * sk_gabor_img_4, 0.7 * sk_frangi_img)  # + 0.02 * sk_gabor_img_1 + 0.02 * sk_gabor_img_2 + 0.02 * sk_gabor_img_3 + 0.04 * sk_gabor_img_4
+    
     all_img = morphology.closing(all_img, morphology.disk(1))
+
+    display_image(sk_frangi_img, "sk_frangi_img")
+    display_image(sk_gabor_img_1, "sk_gabor_img_1")
+    display_image(sk_gabor_img_2, "sk_gabor_img_2")
+    display_image(sk_gabor_img_3, "sk_gabor_img_3")
+    display_image(sk_gabor_img_4, "sk_gabor_img_4")
+    display_image(all_img, "all_img")
+
+    
     _, all_img = cv2.threshold(all_img, 0.3, 1, 0)
     img1 = all_img
     # print(all_img, all_img.shape, type(all_img))
-    # contours, image_cont = cv2.findContours(all_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    # all_img = all_img + image_cont
+    contours, image_cont = cv2.findContours(all_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    all_img = all_img + image_cont
     bool_img = all_img.astype(bool)
     label_image = measure.label(bool_img)
     count = 0
@@ -315,17 +350,17 @@ def face_wrinkle(path):
 if __name__ == '__main__':
     data_dir1 = './face dataset'
     data_dir2 = './infinic dataset/normal'
-    data_dir3 = './crop forehead dataset'
+    data_dir3 = './part dataset'
     imgName1 = 'all_kimchi.jpg'
-    imgName2 = 'forehead_N_119.png'
-    imgName3 = 'left_eye_kimchi.jpg'
+    imgName2 = 'forehead_N_274.png'
+    imgName3 = 'left_eye_N_073.png'
     imgName4 = 'right_cheek_testimg.jpg'
     imgName5 = 'all_testimg2.jpg'
-    imgName6 = 'N_063.png'
+    imgName6 = 'all_N_067.png'
 
     # for (root, directories, files) in os.walk(data_dir2):
     #     for file in files:
     #         wrinkleDetect3(root, file)
     
     # wrinkleDetect3(data_dir2, imgName6)
-    face_wrinkle(os.path.join(data_dir3, imgName2))
+    face_wrinkle(os.path.join(data_dir3, imgName3))
