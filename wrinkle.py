@@ -278,18 +278,18 @@ def master_control(image):
     display_image(canny1, 'canny')
     display_image(canny2, 'canny2')
 
-    sk_frangi_img = canny1
+    sk_frangi_img = c2
     # frangi(g, scale_range=(1, 1.5), scale_step=0.1) #alpha=1.5, beta=0.01  
     
     # sk_frangi_img = morphology.closing(sk_frangi_img, morphology.disk(1))
     # display_image(sk_frangi_img, "sk_frangi_img")
-    sk_gabor_img_1, sk_gabor_1 = gabor(g, frequency=0.25, theta=0)
+    sk_gabor_img_1, sk_gabor_1 = gabor(sk_frangi_img, frequency=0.35, theta=0)
     
-    sk_gabor_img_2, sk_gabor_2 = gabor(g, frequency=0.25, theta=45) 
+    sk_gabor_img_2, sk_gabor_2 = gabor(sk_frangi_img, frequency=0.35, theta=45) 
     
-    sk_gabor_img_3, sk_gabor_3 = gabor(g, frequency=0.25, theta=90)
+    sk_gabor_img_3, sk_gabor_3 = gabor(sk_frangi_img, frequency=0.35, theta=90)
     
-    sk_gabor_img_4, sk_gabor_4 = gabor(g, frequency=0.25, theta=360)  
+    sk_gabor_img_4, sk_gabor_4 = gabor(sk_frangi_img, frequency=0.35, theta=360)  
     
     sk_gabor_img_1 = morphology.opening(sk_gabor_img_1, morphology.disk(2))
     sk_gabor_img_2 = morphology.opening(sk_gabor_img_2, morphology.disk(1))
