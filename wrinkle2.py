@@ -111,46 +111,45 @@ def face_wrinkle2(path):
     c2 = ~c2
 
     #-------------------------------------------------------
-    robertsx = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, 0]])
-    robertsy = np.array([[0, 0, -1], [0, 1, 0], [0, 0, 0]])
-    robertsX = cv2.filter2D(c2, cv2.CV_64F, robertsx)
-    robertsY = cv2.filter2D(c2, cv2.CV_64F, robertsy)
-    prewittx = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
-    prewitty = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
-    prewitt_ = np.array([[-1, -1, 0], [-1, 0, 1], [0, 1, 1]])
+    # robertsx = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, 0]])
+    # robertsy = np.array([[0, 0, -1], [0, 1, 0], [0, 0, 0]])
+    # robertsX = cv2.filter2D(c2, cv2.CV_64F, robertsx)
+    # robertsY = cv2.filter2D(c2, cv2.CV_64F, robertsy)
+    # prewittx = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
+    # prewitty = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
+    # prewitt_ = np.array([[-1, -1, 0], [-1, 0, 1], [0, 1, 1]])
 
-    prewittX = cv2.filter2D(c2, -1, prewittx)
-    prewittY = cv2.filter2D(c2, -1, prewitty)
-    prewitt_ = cv2.filter2D(c2, -1, prewitt_)
-    sobelX = cv2.Sobel (c2, -1, 1, 0, ksize=3)
-    sobelY = cv2.Sobel (c2, -1, 0, 1, ksize=3)
-    sobel = sobelX + sobelY
-    scharrX = cv2.Sobel (c2, -1, 1, 0, ksize = cv2.FILTER_SCHARR)
-    scharrY = cv2.Sobel (c2, -1, 0, 1, ksize = -1)
-    scharr = scharrX + scharrY
+    # prewittX = cv2.filter2D(c2, -1, prewittx)
+    # prewittY = cv2.filter2D(c2, -1, prewitty)
+    # prewitt_ = cv2.filter2D(c2, -1, prewitt_)
+    # sobelX = cv2.Sobel (c2, -1, 1, 0, ksize=3)
+    # sobelY = cv2.Sobel (c2, -1, 0, 1, ksize=3)
+    # sobel = sobelX + sobelY
+    # scharrX = cv2.Sobel (c2, -1, 1, 0, ksize = cv2.FILTER_SCHARR)
+    # scharrY = cv2.Sobel (c2, -1, 0, 1, ksize = -1)
+    # scharr = scharrX + scharrY
 
-    titles = ['original', 'roberts-X', 'roberts-Y', 'prewitt-X', 'prewitt-Y', 'prewitt_', 'sobel-X', 'sobel-Y', 'sobel', 'scharr-X', 'scharr-Y', 'scharr']
-    images = [img, robertsX, robertsY, prewittX, prewittY, prewitt_, sobelX, sobelY, sobel, scharrX, scharrY, scharr]
-    cv2. imshow('original', img)
-    cv2. imshow('Prewitt',prewitt_)
+    # titles = ['original', 'roberts-X', 'roberts-Y', 'prewitt-X', 'prewitt-Y', 'prewitt_', 'sobel-X', 'sobel-Y', 'sobel', 'scharr-X', 'scharr-Y', 'scharr']
+    # images = [img, robertsX, robertsY, prewittX, prewittY, prewitt_, sobelX, sobelY, sobel, scharrX, scharrY, scharr]
+    # cv2. imshow('original', img)
+    # cv2. imshow('Prewitt',prewitt_)
     
-    cv2.imshow('Sobel', sobel)
-    cv2. imshow('Scharr', scharr)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    plt.figure(figsize = (12, 12))
-    for i in range(12):
-        plt.subplot(4, 3, i+1)
-        plt. imshow(images [i], cmap='gray')
-        plt.title(titles[i])
-        plt.axis('off')
+    # cv2.imshow('Sobel', sobel)
+    # cv2. imshow('Scharr', scharr)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    # plt.figure(figsize = (12, 12))
+    # for i in range(12):
+    #     plt.subplot(4, 3, i+1)
+    #     plt. imshow(images [i], cmap='gray')
+    #     plt.title(titles[i])
+    #     plt.axis('off')
 
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
 
 
 #---------------------------------------------------------------------
-
 
 
     blk_size = 9
