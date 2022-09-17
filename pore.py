@@ -25,9 +25,9 @@ def poreDetect(data_dir, imgName):
         norm_img = cv2.normalize(diff_img,None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1) #표준화
         result_planes.append(diff_img)
         result_norm_planes.append(norm_img)
-        cv2.imwrite(os.path.join('./test', '1_' + imgName), dilated_img)
-        cv2.imwrite(os.path.join('./test', '2_' + imgName), bg_img)
-        cv2.imwrite(os.path.join('./test', '3_' + imgName), cv2.absdiff(plane, bg_img))
+        # cv2.imwrite(os.path.join('./test', '1_' + imgName), dilated_img)
+        # cv2.imwrite(os.path.join('./test', '2_' + imgName), bg_img)
+        # cv2.imwrite(os.path.join('./test', '3_' + imgName), cv2.absdiff(plane, bg_img))
 
     result = cv2.merge(result_planes) #병합
     result_norm = cv2.merge(result_norm_planes) #병합
